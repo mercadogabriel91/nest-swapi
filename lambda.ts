@@ -3,6 +3,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './src/app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as awsServerlessExpress from 'aws-serverless-express';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule, new ExpressAdapter());

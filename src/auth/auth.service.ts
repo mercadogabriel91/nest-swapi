@@ -5,11 +5,8 @@ import cognitoModule from '../AWS/Cognito/CognitoModule';
 
 @Injectable()
 export class AuthService {
-  async signUp() {
-    return cognitoModule.signUp(
-      'mercado.gabriel91@hotmail.com',
-      '!userPassword123',
-    );
+  async signUp(email: string, password: string) {
+    return cognitoModule.signUp(email, password);
   }
 
   create(createAuthDto: CreateAuthDto) {

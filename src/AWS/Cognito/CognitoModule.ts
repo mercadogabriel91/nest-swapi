@@ -2,15 +2,28 @@ import {
   CognitoIdentityProviderClient,
   SignUpCommand,
   AdminAddUserToGroupCommand,
+  SignUpCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
+import * as dotenv from 'dotenv';
 
-const client = new CognitoIdentityProviderClient({ region: 'us-east-1' });
-const appClientId = '2jll54kbh3mr1gafbsglnj8n83';
+dotenv.config();
 
 class CognitoModule {
-  async signUp(email: string, password: string) {
+  private appClientId: string;
+  private region: string;
+  private client: CognitoIdentityProviderClient;
+
+  constructor() {
+    this.appClientId = process.env.COGNITO_APP_CLIENT_ID;
+    this.region = process.env.AWS_REGION;
+    this.client = new CognitoIdentityProviderClient({
+      region: this.region,
+    });
+  }
+
+  async signUp(email: string, password: string): Promise<SignUpCommandOutput> {
     const command = new SignUpCommand({
-      ClientId: appClientId,
+      ClientId: this.appClientId,
       Username: email,
       Password: password,
       UserAttributes: [
@@ -22,7 +35,7 @@ class CognitoModule {
     });
 
     try {
-      return await client.send(command).then((res) => {
+      return await this.client.send(command).then((res) => {
         console.log(res);
         return res;
       });
