@@ -23,6 +23,14 @@ export class AuthService {
     return cognitoModule.addUserToAdminGroup(email);
   }
 
+  async confirmUser(email: string, confirmationCode: string) {
+    return cognitoModule.confirmUser(email, confirmationCode);
+  }
+
+  async validateToken(accessToken: string) {
+    return cognitoModule.validateToken(accessToken);
+  }
+
   // create(createAuthDto: CreateAuthDto) {
   //   return 'This action adds a new auth';
   // }

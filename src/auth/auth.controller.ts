@@ -12,37 +12,47 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 //DTOs
-import { SignUpDto } from './dto/SignUpDto';
-import { LogInDto } from './dto/LogInDto';
+import { SignUpDto } from './dto/SignUp.dto';
+import { LogInDto } from './dto/LogIn.dto';
+import { ConfirmUserDto } from './dto/ConfirmUser.dto';
+// Paths
+import Endpoints from './Endpoints/Endpoints';
 
-@Controller('auth')
+// @Controller('auth')
+@Controller(Endpoints.AUTH)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('/signup')
+  // @Post('/signup')
+  @Post(Endpoints.SIGNUP)
   async signUp(@Body(ValidationPipe) signUpDto: SignUpDto) {
     const { email, password, isAdmin } = signUpDto;
 
     return this.authService.signUp(email, password, isAdmin);
   }
 
-  @Post('/login')
+  // @Post('/login')
+  @Post(Endpoints.LOGIN)
   async signIn(@Body(ValidationPipe) logInDto: LogInDto) {
     const { email, password } = logInDto;
 
-    
-    // Error logging in InvalidParameterException: USER_PASSWORD_AUTH flow not enabled for this client
-
     return await this.authService.login(email, password);
-
-    // // Check if the user is an admin
-    // const isAdmin = await this.authService.isUserAdmin(email);
-
-    // return {
-    //   ...response,
-    //   isAdmin,
-    // };
   }
+
+  // @Post('/confirm')
+  @Post(Endpoints.CONFIRM)
+  async confirmUser(@Body(ValidationPipe) confirmUserDto: ConfirmUserDto) {
+    const { email, confirmationCode } = confirmUserDto;
+
+    return await this.authService.confirmUser(email, confirmationCode);
+  }
+
+  // @Post('/validate')
+  // async validateToken(@Body() body: any) {
+  //   const { accessToken } = body;
+
+  //   return await this.authService.validateToken(accessToken);
+  // }
 
   // @Post()
   // create(@Body() createAuthDto: CreateAuthDto) {

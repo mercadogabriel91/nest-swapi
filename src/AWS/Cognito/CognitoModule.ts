@@ -8,6 +8,7 @@ import {
   InitiateAuthCommand,
   AuthFlowType,
   ConfirmSignUpCommand,
+  GetUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import * as dotenv from 'dotenv';
 
@@ -135,6 +136,24 @@ class CognitoModule {
     } catch (error) {
       console.error('Error confirming user', error);
       throw new Error('User confirmation failed');
+    }
+  }
+
+  async validateToken(accessToken: string) {
+    const params = {
+      AccessToken: accessToken,
+    };
+
+    try {
+      const command = new GetUserCommand(params);
+      const response = await this.client.send(command);
+      console.log('Token is valid', response);
+
+      return response;
+    } catch (error) {
+      console.error('Token validation failed', error);
+      
+      throw new Error('Invalid token');
     }
   }
 }
