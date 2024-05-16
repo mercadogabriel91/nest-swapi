@@ -5,28 +5,42 @@ import cognitoModule from '../AWS/Cognito/CognitoModule';
 
 @Injectable()
 export class AuthService {
-  async signUp(email: string, password: string) {
-    return cognitoModule.signUp(email, password);
+  async signUp(email: string, password: string, isAdmin?: boolean) {
+    const useSignupResponse = await cognitoModule.signUp(email, password);
+
+    if (isAdmin) {
+      await this.makeAdmin(email);
+    }
+
+    return useSignupResponse;
   }
 
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  async login(email: string, password: string) {
+    return cognitoModule.login(email, password);
   }
 
-  findAll() {
-    console.log('ALL AUTHS');
-    return `This action returns all auth`;
+  async makeAdmin(email: string) {
+    return cognitoModule.addUserToAdminGroup(email);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+  // create(createAuthDto: CreateAuthDto) {
+  //   return 'This action adds a new auth';
+  // }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+  // findAll() {
+  //   console.log('ALL AUTHS');
+  //   return `This action returns all auth`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} auth`;
+  // }
+
+  // update(id: number, updateAuthDto: UpdateAuthDto) {
+  //   return `This action updates a #${id} auth`;
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} auth`;
+  // }
 }
