@@ -147,7 +147,6 @@ class CognitoModule {
     try {
       const command = new GetUserCommand(params);
       const response = await this.client.send(command);
-      console.log('Token is valid', response);
 
       return response;
     } catch (error) {
