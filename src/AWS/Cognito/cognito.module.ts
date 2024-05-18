@@ -93,11 +93,9 @@ class CognitoModule {
     try {
       const response = await this.client.send(command);
       const groups = response.Groups;
-      this.logger.log(`User ${email} is Admin`);
-
       return groups?.some((group) => group.GroupName === 'Admin');
     } catch (error) {
-      this.logger.error(`User ${email} not found in admins list`);
+      this.logger.error(`Error looking for user ${email} groups`);
       throw new CognitoException(error.message, HttpStatus.NOT_FOUND);
     }
   }

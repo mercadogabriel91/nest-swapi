@@ -58,4 +58,16 @@ export class AuthService {
   async validateToken(accessToken: string): Promise<GetUserCommandOutput> {
     return cognitoModule.validateToken(accessToken);
   }
+
+  async checkIfAdmin(userData: GetUserCommandOutput): Promise<boolean> {
+    const { UserAttributes } = userData;
+    const emailAttribute = UserAttributes.find((attr) => attr.Name === 'email');
+
+    if (emailAttribute) {
+      const email = emailAttribute.Value;
+      return await cognitoModule.checkIfAdmin(email);
+    } else {
+      console.log('Email attribute not found in UserAttributes');
+    }
+  }
 }

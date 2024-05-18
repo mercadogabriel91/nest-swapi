@@ -10,11 +10,15 @@ import {
 // Paths
 import Endpoints from './Endpoints/Endpoints';
 // Guards
-import { AuthGuard } from '../auth/guard/auth.guard';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 // Srvices
 import { MovieService } from './movie.service';
 // DTOs
 import { UploadMovieDto } from './dto/upload-movie.dto';
+// Roles
+import { Roles } from '../auth/RolesAndPermissions/roles.decorator';
+import { Role } from '../auth/RolesAndPermissions/roles.enum';
 
 @Controller(Endpoints.MOVIE)
 export class MovieController {
@@ -34,6 +38,8 @@ export class MovieController {
   }
 
   @Get(`${Endpoints.FIND_ONE}/:id`)
+  @Roles(Role.USER)
+  @UseGuards(AuthGuard, RolesGuard)
   findOne(@Param('id') id: number) {
     return this.movieService.findOne(+id);
   }
