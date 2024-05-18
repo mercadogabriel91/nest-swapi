@@ -1,31 +1,61 @@
 import { Injectable } from '@nestjs/common';
+import {
+  AdminAddUserToGroupCommandOutput,
+  AuthenticationResultType,
+  GetUserCommandOutput,
+} from '@aws-sdk/client-cognito-identity-provider';
+// AWS serices
 import cognitoModule from '../AWS/Cognito/cognito.module';
+// DTOs
+import { ResponseDto } from './dto/Response.dto';
 
 @Injectable()
 export class AuthService {
-  async signUp(email: string, password: string, isAdmin?: boolean) {
+  async signUp(
+    email: string,
+    password: string,
+    isAdmin?: boolean,
+  ): Promise<ResponseDto> {
     const useSignupResponse = await cognitoModule.signUp(email, password);
 
     if (isAdmin) {
       await this.makeAdmin(email);
     }
 
-    return useSignupResponse;
+    const { $metadata } = useSignupResponse;
+
+    return new ResponseDto(
+      $metadata.httpStatusCode,
+      'A confirmation email has been sent',
+    );
   }
 
-  async login(email: string, password: string) {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<AuthenticationResultType> {
     return cognitoModule.login(email, password);
   }
 
-  async makeAdmin(email: string) {
+  async makeAdmin(email: string): Promise<AdminAddUserToGroupCommandOutput> {
     return cognitoModule.addUserToAdminGroup(email);
   }
 
-  async confirmUser(email: string, confirmationCode: string) {
-    return cognitoModule.confirmUser(email, confirmationCode);
+  async confirmUser(
+    email: string,
+    confirmationCode: string,
+  ): Promise<ResponseDto> {
+    const confirmationResponse = await cognitoModule.confirmUser(
+      email,
+      confirmationCode,
+    );
+
+    const { $metadata } = confirmationResponse;
+
+    return new ResponseDto($metadata.httpStatusCode, 'User confirmed');
   }
 
-  async validateToken(accessToken: string) {
+  async validateToken(accessToken: string): Promise<GetUserCommandOutput> {
     return cognitoModule.validateToken(accessToken);
   }
 }
