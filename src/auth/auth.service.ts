@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import cognitoModule from '../AWS/Cognito/CognitoModule';
+import cognitoModule from '../AWS/Cognito/cognito.module';
 
 @Injectable()
 export class AuthService {

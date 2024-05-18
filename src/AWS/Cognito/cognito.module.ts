@@ -9,12 +9,17 @@ import {
   AuthFlowType,
   ConfirmSignUpCommand,
   GetUserCommand,
+  AuthenticationResultType,
+  ConfirmSignUpCommandOutput,
 } from '@aws-sdk/client-cognito-identity-provider';
+import { HttpStatus, Logger } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import { CognitoException } from './cognito.exception';
 
 dotenv.config();
 
 class CognitoModule {
+  private readonly logger = new Logger(CognitoModule.name);
   private appClientId: string;
   private region: string;
   private cognitoUserPoolId: string;
@@ -44,10 +49,12 @@ class CognitoModule {
 
     try {
       return await this.client.send(command).then((res) => {
+        this.logger.log(`User signed up Successfully!`);
         return res;
       });
     } catch (err) {
-      return err;
+      this.logger.error(`User sign up error: ${err}`);
+      throw new CognitoException(err.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -64,14 +71,14 @@ class CognitoModule {
 
     try {
       return await this.client.send(command).then((res) => {
-        console.log(`Successfully added ${username} as Admin`);
+        this.logger.log(`Successfully added ${username} as Admin`);
 
         return res;
       });
     } catch (err) {
-      console.error(`Error adding ${username} as Admin:`, err);
+      this.logger.error(`Error adding ${username} as Admin:`, err);
 
-      throw err;
+      throw new CognitoException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -86,15 +93,19 @@ class CognitoModule {
     try {
       const response = await this.client.send(command);
       const groups = response.Groups;
+      this.logger.log(`User ${email} is Admin`);
+
       return groups?.some((group) => group.GroupName === 'Admin');
     } catch (error) {
-      // Handle error
-      console.error('Error checking admin status:', error);
-      throw error; // or throw a custom error
+      this.logger.error(`User ${email} not found in admins list`);
+      throw new CognitoException(error.message, HttpStatus.NOT_FOUND);
     }
   }
 
-  async login(email: string, password: string): Promise<string> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<AuthenticationResultType> {
     const params = {
       AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
       ClientId: this.appClientId,
@@ -106,21 +117,22 @@ class CognitoModule {
 
     try {
       const command = new InitiateAuthCommand(params);
-
       const response = await this.client.send(command);
       const { AuthenticationResult } = response;
-      const { AccessToken } = AuthenticationResult;
 
-      console.log('Login successful!');
+      this.logger.log('Login successful!');
 
-      return AccessToken;
+      return AuthenticationResult;
     } catch (error) {
-      console.error('Error logging in', error);
-      throw new Error('Login failed');
+      this.logger.error(`Error logging in: ${error}`);
+      throw new CognitoException(error, HttpStatus.UNAUTHORIZED);
     }
   }
 
-  async confirmUser(email: string, confirmationCode: string) {
+  async confirmUser(
+    email: string,
+    confirmationCode: string,
+  ): Promise<ConfirmSignUpCommandOutput> {
     const params = {
       ClientId: this.appClientId,
       Username: email,
@@ -130,12 +142,13 @@ class CognitoModule {
     try {
       const command = new ConfirmSignUpCommand(params);
       const response = await this.client.send(command);
-      console.log('User confirmation successful', response);
+      this.logger.log(`User confirmation successful!`);
 
       return response;
     } catch (error) {
-      console.error('Error confirming user', error);
-      throw new Error('User confirmation failed');
+      this.logger.error(`Error confirming user: ${error}`);
+
+      throw new CognitoException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -147,12 +160,12 @@ class CognitoModule {
     try {
       const command = new GetUserCommand(params);
       const response = await this.client.send(command);
+      this.logger.log(`Token is valid`);
 
       return response;
     } catch (error) {
-      console.error('Token validation failed', error);
-      
-      throw new Error('Invalid token');
+      this.logger.error(`Token validation failed: ${error}`);
+      throw new CognitoException(error, HttpStatus.UNAUTHORIZED);
     }
   }
 }
