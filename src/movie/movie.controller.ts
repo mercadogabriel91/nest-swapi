@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -56,6 +57,13 @@ export class MovieController {
     const { episode_id, updateMovieDto } = patchMovieDto;
 
     return this.movieService.updateMovie(episode_id, updateMovieDto);
+  }
+
+  @Delete(`${Endpoints.DELETE_ONE}/:id`)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  deleteOne(@Param('id') id: number) {
+    return this.movieService.deleteOne(id);
   }
 
   @Get(Endpoints.EASTEREGG)

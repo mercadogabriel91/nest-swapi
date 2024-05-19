@@ -30,6 +30,10 @@ export class MovieService {
     return await dynamoDbModule.update(episode_id, updateMovieDto);
   }
 
+  async deleteOne(episode_id: number) {
+    return await dynamoDbModule.deleteMovie(episode_id);
+  }
+
   easterEgg() {
     return {
       ayo: 'Get Duned my boy!',

@@ -1,15 +1,23 @@
 import {
+  DeleteItemCommand,
+  DeleteItemCommandInput,
+  DeleteItemCommandOutput,
+  DescribeTableCommand,
+  DescribeTableCommandInput,
   DynamoDBClient,
   QueryCommand,
   ScanCommand,
   ScanCommandOutput,
 } from '@aws-sdk/client-dynamodb';
 import {
+  DeleteCommand,
+  DeleteCommandOutput,
   DynamoDBDocumentClient,
   PutCommand,
   PutCommandOutput,
   UpdateCommand,
   UpdateCommandOutput,
+  DeleteCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { Logger, NotFoundException } from '@nestjs/common';
@@ -88,8 +96,7 @@ class DynamoDbModule {
     episode_id: number,
     updateMovieDto: UpdateMovieDto,
   ): Promise<UpdateCommandOutput> {
-    const episodeToUpdate = await this.findOne(episode_id);
-    const { title } = episodeToUpdate;
+    const { title } = await this.findOne(episode_id);
     const updateExpression = [];
     const expressionAttributeValues = {};
     const expressionAttributeNames = {};
@@ -113,6 +120,26 @@ class DynamoDbModule {
     });
 
     return await this.client.send(command);
+  }
+
+  async deleteMovie(episode_id: number): Promise<DeleteItemCommandOutput> {
+    const movie = await this.findOne(episode_id);
+    const { title } = movie;
+
+    const deleteItemParams: DeleteItemCommandInput = {
+      TableName: this.dynamoDbTable,
+      Key: {
+        title: { S: title },
+        episode_id: { N: episode_id.toString() },
+      },
+    };
+
+    try {
+      return await this.client.send(new DeleteItemCommand(deleteItemParams));
+    } catch (err) {
+      this.logger.error('Error deleting item:', err);
+      throw err;
+    }
   }
 }
 
