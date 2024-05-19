@@ -30,8 +30,13 @@ export class MovieService {
     return await dynamoDbModule.update(episode_id, updateMovieDto);
   }
 
-  async deleteOne(episode_id: number) {
-    return await dynamoDbModule.deleteMovie(episode_id);
+  async deleteOne(episode_id: number): Promise<ResponseDto> {
+    const { $metadata } = await dynamoDbModule.deleteMovie(episode_id);
+
+    return new ResponseDto(
+      $metadata.httpStatusCode,
+      `Movie ${episode_id} deleted successfully`,
+    );
   }
 
   easterEgg() {
