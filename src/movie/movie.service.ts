@@ -4,6 +4,7 @@ import dynamoDbModule from '../AWS/DynamoDb/dynamodb.module';
 // DTOs
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { ResponseDto } from '../auth/dto/Response.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MovieService {
@@ -23,6 +24,10 @@ export class MovieService {
 
   async findOne(id: number) {
     return await dynamoDbModule.findOne(id);
+  }
+
+  async updateMovie(episode_id: number, updateMovieDto: UpdateMovieDto) {
+    return await dynamoDbModule.update(episode_id, updateMovieDto);
   }
 
   easterEgg() {

@@ -8,12 +8,15 @@ import {
   DynamoDBDocumentClient,
   PutCommand,
   PutCommandOutput,
+  UpdateCommand,
+  UpdateCommandOutput,
 } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { Logger, NotFoundException } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 // DTOs
 import { CreateMovieDto } from '../../movie/dto/create-movie.dto';
+import { UpdateMovieDto } from 'src/movie/dto/update-movie.dto';
 
 dotenv.config();
 
@@ -79,6 +82,37 @@ class DynamoDbModule {
     } catch (err) {
       this.logger.error(`Error getting movies:`, err);
     }
+  }
+
+  async update(
+    episode_id: number,
+    updateMovieDto: UpdateMovieDto,
+  ): Promise<UpdateCommandOutput> {
+    const episodeToUpdate = await this.findOne(episode_id);
+    const { title } = episodeToUpdate;
+    const updateExpression = [];
+    const expressionAttributeValues = {};
+    const expressionAttributeNames = {};
+
+    Object.keys(updateMovieDto).forEach((key) => {
+      updateExpression.push(`#${key} = :${key}`);
+      expressionAttributeValues[`:${key}`] = updateMovieDto[key];
+      expressionAttributeNames[`#${key}`] = key;
+    });
+
+    const command = new UpdateCommand({
+      TableName: this.dynamoDbTable,
+      Key: {
+        title: title,
+        episode_id: episode_id,
+      },
+      UpdateExpression: `set ${updateExpression.join(', ')}`,
+      ExpressionAttributeValues: expressionAttributeValues,
+      ExpressionAttributeNames: expressionAttributeNames,
+      ReturnValues: 'ALL_NEW',
+    });
+
+    return await this.client.send(command);
   }
 }
 

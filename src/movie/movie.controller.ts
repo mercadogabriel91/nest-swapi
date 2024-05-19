@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
   ValidationPipe,
@@ -16,6 +17,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { MovieService } from './movie.service';
 // DTOs
 import { UploadMovieDto } from './dto/upload-movie.dto';
+import { PatchMovieDto } from './dto/patch-movie.dto';
 // Roles
 import { Roles } from '../auth/RolesAndPermissions/roles.decorator';
 import { Role } from '../auth/RolesAndPermissions/roles.enum';
@@ -25,12 +27,15 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
   @Get(Endpoints.GET_ALL)
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.USER, Role.ADMIN)
   getProtectedResource() {
     return this.movieService.getAllMovies();
   }
 
   @Post(Endpoints.UPLOAD)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async uploadMovie(@Body(ValidationPipe) uploadMovieDto: UploadMovieDto) {
     const { movie } = uploadMovieDto;
 
@@ -42,6 +47,15 @@ export class MovieController {
   @UseGuards(AuthGuard, RolesGuard)
   findOne(@Param('id') id: number) {
     return this.movieService.findOne(+id);
+  }
+
+  @Patch(Endpoints.UPDATE_ONE)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard, RolesGuard)
+  updateMovie(@Body(ValidationPipe) patchMovieDto: PatchMovieDto) {
+    const { episode_id, updateMovieDto } = patchMovieDto;
+
+    return this.movieService.updateMovie(episode_id, updateMovieDto);
   }
 
   @Get(Endpoints.EASTEREGG)
