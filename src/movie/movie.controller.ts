@@ -30,7 +30,7 @@ export class MovieController {
   @Get(Endpoints.GET_ALL)
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(Role.USER, Role.ADMIN)
-  getProtectedResource() {
+  getAllMovies() {
     return this.movieService.getAllMovies();
   }
 
