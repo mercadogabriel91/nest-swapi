@@ -1,0 +1,101 @@
+[33mcommit 61e4a313644dd0f43cf44617fc835e953494d503[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Mon May 20 19:26:35 2024 -0300
+
+    feat(SWAPI-014): include movie controller testing
+
+[33mcommit a96c81bbd66e1359010ea72c264b5dc2532dc2f8[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sun May 19 16:41:46 2024 -0300
+
+    feat(SWAPI-013):md d the md file
+
+[33mcommit 8b4f0ad8616a4ebf9f1c8ca5e38674d4df659936[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sun May 19 16:34:19 2024 -0300
+
+    feat(SWAPI-012):fixed delete one endpoint, changed readme file
+
+[33mcommit 6713596311212f705a69236a5305fcadba7c53e2[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sun May 19 16:21:02 2024 -0300
+
+    feat(SWAPI-011): implemented delete endpoint
+
+[33mcommit 4fb586c596a9eda130e239b7028b310ebb8f54a7[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sat May 18 22:58:03 2024 -0300
+
+    feat(SWAPI-010): implemented update movies endpoit
+
+[33mcommit 0af9f0c9844ede121f4d31dc500fb3f9717f1414[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sat May 18 20:14:52 2024 -0300
+
+    feat(SWAPI-009): first stage roles and permissions
+
+[33mcommit d12ccbeec7e7b03bada44d37d8baafb2cab38ff6[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sat May 18 17:16:36 2024 -0300
+
+    feat(SWAPI-008): created and implemented DDB and movie endpoints
+
+[33mcommit b8a58cc65657ca9fe8daf6672b26073a89a975cb[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sat May 18 01:12:16 2024 -0300
+
+    feat(SWAPI-007): mapped response dto and class to service
+
+[33mcommit 24aefc90f807359a4e2d798eccc975bc397a6933[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Sat May 18 00:34:29 2024 -0300
+
+    feat(SWAPI-006): fixed error handling
+
+[33mcommit ef5cf793a10b16ab3e2ca0a7e97d1c20e3fe1b6a[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Fri May 17 18:10:07 2024 -0300
+
+    feat(SWAPI-005): fixed guard and secured new endpoint
+
+[33mcommit 849afc05bfda1fdfb606de7e6ae50f4ec516e6bf[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Thu May 16 20:32:42 2024 -0300
+
+    feat(SWAPI-004): created first guard version to validate token
+
+[33mcommit adf5b136483876f069fbb6cb760c4461d2bd6af2[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Thu May 16 19:20:37 2024 -0300
+
+    feat(SWAPI-003): implemented sign in and confirm user methods
+
+[33mcommit 963fa5070f58ab17a82c7ea9877b461f45dcb2a0[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Wed May 15 20:45:39 2024 -0300
+
+    feat(SWAPI-002): implemented env, signup and validation
+
+[33mcommit 09d832f5d509daad6422cc3da7ba59b2c3b4af29[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Wed May 15 19:40:54 2024 -0300
+
+    feat(SWAPI-001): include cognito SDK
+
+[33mcommit fed25b0c466f922a8a8a76da737c9c0408458dd3[m
+Author: gabriel.mercado@darwoft.com <gabriel.mercado@darwoft.com>
+Date:   Tue May 14 17:56:34 2024 -0300
+
+    feat(SWAPI-001): include serverless framework
+
+[33mcommit 585da27bd53b2b9c5c200e87625687d17c8e6c48[m
+Author: Gabriel <gabriel.mercado@darwoft.com>
+Date:   Tue May 14 11:31:59 2024 -0300
+
+    initial commit
+
+[33mcommit f5f443e08ac8945803b4d3611e2110b55398664d[m
+Author: mercadogabriel91 <52676315+mercadogabriel91@users.noreply.github.com>
+Date:   Tue May 14 11:24:35 2024 -0300
+
+    Initial commit
