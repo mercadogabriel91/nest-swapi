@@ -57,15 +57,17 @@ The API exposes the following endpoints:
 - **GET /movie/getall**: Retrieves all movies from the database.
 - **POST /movie/upload**: Uploads a new movie to the database. Requires an `UploadMovieDto` payload.
 - **GET /movie/findone/:id**: Retrieves a specific movie by its ID.
-- **PATCH /movie/updateone**: Updates a specific movie by its ID. Requires a `PatchMovieDto` payload.
+- **PATCH /movie/updateone**: Updates a specific movie by its ID.
+ Requires a `PatchMovieDto` payload (the title cannot be changed since is a key being used by DynamoDB)
 - **DELETE /movie/deleteone/:id**: Deletes a specific movie by its ID.
-- **GET /movie/easteregg**: Returns a fun easter egg message.
+- **GET /movie/easteregg**:  **The Emperor commands it, it is done.**
 
 ### Authentication Endpoints:
 
 - **POST /auth/signup**: Registers a new user. Requires an email and password.
 - **POST /auth/login**: Logs in a user. Requires an email and password.
-- **POST /auth/confirm/:email/:confirmationCode**: Confirms a user's email address. Requires an email and confirmation code.
+- **POST /auth/confirm/:email/:confirmationCode**: Confirms a user's email address.
+ Requires an email and confirmation code.
 
 ## Data Models
 
